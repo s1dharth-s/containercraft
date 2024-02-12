@@ -117,7 +117,3 @@ def start():
     Start the dev container
     """
     print("Starting the dev container")
-
-
-if __name__ == "__main__":
-    app()
