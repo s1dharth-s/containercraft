@@ -1,0 +1,40 @@
+{
+    "name": "{{NAME}}",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "postCreateCommand": {
+        "createVenv" : "python{{PY_VER}} -m venv .venv",
+        "installLint": "python{{PY_VER}} -m pip install ruff",
+        "installTesting": "python{{PY_VER}} -m pip install -U pytest",
+        // "installRequirements": "python{{PY_VER}} -m pip install -r requirements.txt"
+        "installRequirements": ".venv/bin/python3 -m pip install -r requirements.txt"
+    },
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "python.pythonPath": "/usr/local/bin/python",
+                "python.languageServer": "Pylance",
+                "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+                "[python]": {
+                        "editor.formatOnSave": true,
+                        "editor.codeActionsOnSave": {
+                            "source.fixAll": "always",
+                            "source.organizeImports": "always"
+                        },
+                        "editor.defaultFormatter": "charliermarsh.ruff"
+                    }
+            },
+            "extensions": [
+                "ms-python.python",
+                "yzhang.markdown-all-in-one",
+                "ms-azuretools.vscode-docker",
+                "charliermarsh.ruff",
+                "ms-python.mypy-type-checker"
+            ]
+    },
+        "forwardPorts": {{PORTS}},
+        "remoteUser": "root"
+    }
+}
