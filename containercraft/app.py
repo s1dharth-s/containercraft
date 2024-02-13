@@ -1,10 +1,14 @@
 import json
 import os
 import shutil
-from typing import Annotated
+from pathlib import Path
+from typing import Annotated, Optional
 
 import typer
 
+current_script_path = Path(__file__).resolve()  # Path to the current script
+project_root = current_script_path.parent
+templates_path = project_root / "templates"
 app = typer.Typer()
 
 
@@ -26,17 +30,9 @@ def create(
         ),
     ],
     requirements_file: Annotated[
-        str,
-        typer.Option(
-            "--requirements", "-r", help="Path to the requirements file", prompt=True
-        ),
-    ],
-    include_git_ssh: Annotated[
-        bool,
-        typer.Option(
-            "--include-configs", help="Include ssh and git config in the dev containers"
-        ),
-    ] = False,
+        Optional[str],
+        typer.Option("--requirements", "-r", help="Path to the requirements file"),
+    ] = None,
 ):
     """
     Create a Dockerfile and setup the configuration for thes Dev Container.
@@ -48,11 +44,20 @@ def create(
 
     if not os.path.exists(workspace_location):
         typer.echo(
-            f"Workspace location {workspace_location} not found. Creating workspace..."
+            f"Workspace location {workspace_location} not found. Creating workspace with empty git repository..."
         )
         os.makedirs(workspace_location)
+        os.system(f"cd {workspace_location} && git init")
     else:
         typer.echo(f"Workspace location {workspace_location} found. Proceeding...")
+        # Check if workspace is a git repo or not
+        if not os.path.isdir(f"{workspace_location}/.git"):
+            typer.echo("Directory is not a git repository. Initializing git...")
+            os.system(f"cd {workspace_location} && git init")
+        else:
+            typer.echo(
+                "Directory is already a git repository. Skipping git initialization."
+            )
 
     # create .devcontainer folder and devcontainer.json
     devcontainer_folder = f"{workspace_location}/.devcontainer"
@@ -61,11 +66,11 @@ def create(
     else:
         if os.path.exists(f"{devcontainer_folder}/devcontainer.json"):
             typer.echo(
-                f"Devcontainer already exists in {devcontainer_folder}. Please use containercraft edit command to edit existing environment. Exiting..."
+                f"devcontainer already exists in {devcontainer_folder}. Please remove exisiting .devcontainer file before proceeding. Exiting..."
             )
             return
 
-    with open("templates/devcontainer_template.json", "r") as f:
+    with open(templates_path / "devcontainer_template.json", "r") as f:
         # Read the entire content
         content = f.read()
 
@@ -85,16 +90,34 @@ def create(
         content.replace("{{NAME}}", name)
         .replace("{{PORTS}}", json.dumps(ports))
         .replace("{{PY_VER}}", pyversion)
+        .replace("{{WORKSPACE}}", os.path.basename(workspace_location))
     )
 
     with open(f"{devcontainer_folder}/devcontainer.json", "w") as f:
         f.write(new_content)
 
     # Copy the requirements file to the workspace
-    requirements_file = os.path.abspath(requirements_file)
-    shutil.copy2(requirements_file, workspace_location)
+    if not requirements_file:
+        requirements_file = "requirements.txt"
+        with open(f"{workspace_location}/{requirements_file}", "w") as f:
+            f.write("")
+    else:
+        requirements_file = os.path.abspath(requirements_file)
+        shutil.copy2(requirements_file, workspace_location)
 
-    with open("templates/docker_template", "r") as f:
+    # Copy pre-commit config file to the workspace
+    shutil.copy2(
+        templates_path / ".pre-commit-config-template.yaml",
+        workspace_location + "/.pre-commit-config.yaml",
+    )
+    
+    # Copy .gitingore file to the workspace
+    shutil.copy2(templates_path / ".gitignore", workspace_location + "/.gitignore")
+    
+    # Copy start.sh file to the workspace
+    shutil.copy2(templates_path / "startup.sh" ,f"{devcontainer_folder}/startup.sh")
+
+    with open(templates_path / "docker_template", "r") as f:
         # Read the entire content
         content = f.read()
 

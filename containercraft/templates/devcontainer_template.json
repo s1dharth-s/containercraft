@@ -4,19 +4,22 @@
         "dockerfile": "Dockerfile",
         "context": ".."
     },
+    // "onCreateCommand": {
+    //     "createVenv": "python{{PY_VER}} -m venv .venv"
+    // },
+    // "waitFor" : "onCreateCommand",
     "postCreateCommand": {
-        "createVenv" : "python{{PY_VER}} -m venv .venv",
-        "installLint": "python{{PY_VER}} -m pip install ruff",
-        "installTesting": "python{{PY_VER}} -m pip install -U pytest",
-        // "installRequirements": "python{{PY_VER}} -m pip install -r requirements.txt"
-        "installRequirements": ".venv/bin/python3 -m pip install -r requirements.txt"
+        "changeGitConfig": "git config --global --add safe.directory /workspaces/{{WORKSPACE}}",
+        // "createVenv": "python3{{PY_VER}} -m venv .venv",
+        "executeStartupCommand": ". .devcontainer/startup.sh"
     },
+    "waitFor" : "postCreateCommand",
     "customizations": {
         "vscode": {
             "settings": {
                 "python.pythonPath": "/usr/local/bin/python",
                 "python.languageServer": "Pylance",
-                "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+                "python.defaultInterpreterPath": "/usr/bin/python{{PY_VER}}",
                 "[python]": {
                         "editor.formatOnSave": true,
                         "editor.codeActionsOnSave": {

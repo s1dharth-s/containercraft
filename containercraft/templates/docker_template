@@ -11,5 +11,6 @@ RUN apt-get update && \
     python{{PY_VER}} -m pip install setuptools
     
 COPY requirements.txt requirements.txt
+COPY .pre-commit-config.yaml .pre-commit-config.yaml
 RUN python{{PY_VER}} -m pip install --upgrade pip
 
