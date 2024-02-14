@@ -39,3 +39,4 @@ wheels/
 *.sln
 *.pyc
 *.pyo
+.tox

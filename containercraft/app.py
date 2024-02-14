@@ -3,8 +3,10 @@ import os
 import shutil
 from pathlib import Path
 from typing import Annotated, Optional
+import subprocess
 
 import typer
+from rich import print
 
 current_script_path = Path(__file__).resolve()  # Path to the current script
 project_root = current_script_path.parent
@@ -43,21 +45,19 @@ def create(
     )
 
     if not os.path.exists(workspace_location):
-        typer.echo(
+        print(
             f"Workspace location {workspace_location} not found. Creating workspace with empty git repository..."
         )
         os.makedirs(workspace_location)
         os.system(f"cd {workspace_location} && git init")
     else:
-        typer.echo(f"Workspace location {workspace_location} found. Proceeding...")
+        print(f"Workspace location {workspace_location} found. Proceeding...")
         # Check if workspace is a git repo or not
         if not os.path.isdir(f"{workspace_location}/.git"):
-            typer.echo("Directory is not a git repository. Initializing git...")
+            print("Directory is not a git repository. Initializing git...")
             os.system(f"cd {workspace_location} && git init")
         else:
-            typer.echo(
-                "Directory is already a git repository. Skipping git initialization."
-            )
+            print("Directory is already a git repository. Skipping git initialization.")
 
     # create .devcontainer folder and devcontainer.json
     devcontainer_folder = f"{workspace_location}/.devcontainer"
@@ -65,12 +65,12 @@ def create(
         os.makedirs(devcontainer_folder)
     else:
         if os.path.exists(f"{devcontainer_folder}/devcontainer.json"):
-            typer.echo(
+            print(
                 f"devcontainer already exists in {devcontainer_folder}. Please remove exisiting .devcontainer file before proceeding. Exiting..."
             )
             return
 
-    with open(templates_path / "devcontainer_template.json", "r") as f:
+    with open(templates_path / "devcontainer.json.template", "r") as f:
         # Read the entire content
         content = f.read()
 
@@ -96,6 +96,34 @@ def create(
     with open(f"{devcontainer_folder}/devcontainer.json", "w") as f:
         f.write(new_content)
 
+    with open(f"{devcontainer_folder}/devcontainer.json", "r") as f:
+        config = json.load(f)
+
+    docker_capability = typer.prompt("Enable Docker capability?", default="false")
+
+    if docker_capability == "true":
+        docker_type = typer.prompt(
+            "Enter the type of Docker capability: \n 1. Docker-in-Docker \n2.Docker-outside-of-docker \n",
+            default="1",
+        )
+        match int(docker_type):
+            case 1:
+                config["features"] = {
+                    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+                }
+            case 2:
+                config["features"] = {
+                    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+                }
+            case _:
+                print("Invalid option. choosing default option...")
+                config["features"] = {
+                    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+                }
+
+    with open(f"{devcontainer_folder}/devcontainer.json", "w") as f:
+        f.write(json.dumps(config))
+
     # Copy the requirements file to the workspace
     if not requirements_file:
         requirements_file = "requirements.txt"
@@ -107,15 +135,26 @@ def create(
 
     # Copy pre-commit config file to the workspace
     shutil.copy2(
-        templates_path / ".pre-commit-config-template.yaml",
+        templates_path / ".pre-commit-config.yaml.template",
         workspace_location + "/.pre-commit-config.yaml",
     )
-    
+
     # Copy .gitingore file to the workspace
     shutil.copy2(templates_path / ".gitignore", workspace_location + "/.gitignore")
-    
+
     # Copy start.sh file to the workspace
-    shutil.copy2(templates_path / "startup.sh" ,f"{devcontainer_folder}/startup.sh")
+    shutil.copy2(templates_path / "startup.sh", f"{devcontainer_folder}/startup.sh")
+
+    # Copy github action file to the workspace
+    os.makedirs(
+        os.path.dirname(f"{workspace_location}/.github/workflows/"), exist_ok=True
+    )
+    shutil.copy2(
+        templates_path / "github_action_template.yml",
+        f"{workspace_location}/.github/workflows/test.yml",
+    )
+    # Copy tox.ini file to the workspace
+    shutil.copy2(templates_path / "tox.ini.template", f"{workspace_location}/tox.ini")
 
     with open(templates_path / "docker_template", "r") as f:
         # Read the entire content
@@ -129,14 +168,57 @@ def create(
         # Write the modified content
         f.write(new_content)
 
-    typer.echo(
-        f"Devcontainer created in {devcontainer_folder}. Please use the VS Code Dev Container extension to launch the environment."
+    print(f"Devcontainer created in {devcontainer_folder}.")
+    print(
+        f"""\nFollowing files has been created and placed in the workspace:
+               1. Pre-commit Configuration File: {workspace_location}/.pre-commit-config.yaml
+               2. Tox Configuration File: {workspace_location}/tox.ini
+               3. Github Action File: {workspace_location}/.github/workflows/test.yml
+               4. Gitignore File: {workspace_location}/.gitignore
+               5. requirements.txt: {workspace_location}/{requirements_file}
+               6. devcontainer.json: {devcontainer_folder}/devcontainer.json
+               7. Dockerfile: {devcontainer_folder}/Dockerfile
+               """
+    )
+    print(
+        "[bold red]Note:[/bold red] The template files will serve as a starting point and it might not work for all use cases. Please modify them as per your requirements."
+    )
+    print(
+        "\n[bold green]To run your devcontainer, start VS Code, run the Dev Containers: Open Folder in Container command from the Command Palette (F1) or quick actions Status bar item, and select the worspace folder[/bold green]"
     )
 
 
 @app.command()
-def start():
+def start(
+    workspace: Annotated[str, typer.Option("-w", help="Location of the workspace")],
+):
     """
-    Start the dev container
+    Allows to start and attatch to the container outside the VS Code environment.
     """
-    print("Starting the dev container")
+
+    if not os.path.exists(workspace):
+        typer.echo(f"Workspace {workspace} not found. Exiting...")
+        raise typer.Exit(code=1)
+
+    devcontainer_path = Path(workspace) / ".devcontainer"
+    if not devcontainer_path.exists():
+        typer.echo(
+            "The specified workspace does not contain a .devcontainer directory. Use containercraft create to create a devcontainer. Exiting..."
+        )
+        raise typer.Exit(code=1)
+
+    config_file = devcontainer_path / "devcontainer.json"
+    container_conf = json.load(open(config_file, "r"))
+
+    name = container_conf["runArgs"][1]
+
+    command = ["docker", "start", str(name)]
+    subprocess.Popen(command).wait()
+
+    typer.echo(f"Attatching to container {name} in workspace {workspace}...")
+    command2 = f"docker exec -it {name} /bin/bash"
+    subprocess.Popen(command2, shell=True).wait()
+
+    command3 = ["docker", "stop", str(name)]
+    subprocess.Popen(command3).wait()
+    typer.echo(f"Container {name} stopped.")
