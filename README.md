@@ -1,4 +1,4 @@
-## Containercraft
+# Containercraft
 **Containercraft** simplifies the process of setting up consistent, isolated, and reproducible Python development environments using Docker containers. By automating the environment setup, Containercraft eliminates the common "it works on my machine" problem, ensuring that every team member, from interns to seasoned developers, works in an identical setup. This streamlined approach not only saves time but also enhances productivity, allowing developers to focus on coding rather than configuration.
 
 Key Features:
@@ -13,7 +13,7 @@ Containercraft offers a hassle-free solution for managing Python development env
 
 The containers are to be used in tandem with VS Code's [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers).
 
-### Set Up
+## Set Up
 1. Clone the [containercraft](https://github.com/s1dharth-s/containercraft) repository to your machine.**Note:** If you are cloning the current repository, make sure to use `git clone --recurse-submodules`.
 2. Run `./setup.sh` inside the repo to setup the dependencies. If you are curious, the script is just setting up [pipx](https://github.com/pypa/pipx), [Poetry](https://github.com/python-poetry/poetry) and Docker. After the script finishes executing, **make sure to open up a new terminal to continue**. If docker does not work without `sudo`, try running the following:
     ```bash
@@ -28,10 +28,10 @@ The containers are to be used in tandem with VS Code's [Dev Containers](https://
     ```
 4. That's it! :tada: Now you can use `containercraft`.
 
-### Usage
+## Usage
 Run `containercraft --help` to see the available commands.
 
-#### `containercraft create`: To create a new dev container.
+### `containercraft create`: To create a new dev container.
 As a quick demo of `containercraft`, let us setup a sample workspace.
 1. In the same directory, run:
     ```bash
@@ -43,3 +43,14 @@ As a quick demo of `containercraft`, let us setup a sample workspace.
 3. To manually launch as a dev container, or if you missed the prompt, press `F1` and then select **Dev Containers: Reopen in Container command**
     ![alt text](images/image.png)
 4. There open up `sample.py` to get a glimpse of ruff linter and mypy in action. If you decide to push the repository to GitHub, you can see the CI pipeline working as well!
+
+### `containercraft start`: To start a Dev Container outside of the VS Code environment.
+**This command will only work if you have build your container at least once with VS Code!**
+
+Sometimes you just want access to your development environment outside of VS Code. That's where you can use `containercraft start` to start and attach to a container **that was previously built with VS Code**.
+
+For example, run:
+```bash
+# Starts and attatches to the container that was built as part of the last example
+containercraft start -w ./sample_workspace
+```
