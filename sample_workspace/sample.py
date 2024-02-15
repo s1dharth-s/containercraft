@@ -1,3 +1,6 @@
+import os  # `os` imported but not used
+
+
 def mypy_example(a: str) -> int:
     """
     Shows working of mypy for type checking.

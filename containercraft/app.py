@@ -1,9 +1,9 @@
 import json
 import os
 import shutil
+import subprocess
 from pathlib import Path
 from typing import Annotated, Optional
-import subprocess
 
 import typer
 from rich import print
@@ -44,6 +44,7 @@ def create(
         f"Creating Dockerfile for Python {pyversion} and requirements file {requirements_file}"
     )
 
+    workspace_location = os.path.abspath(workspace_location)
     if not os.path.exists(workspace_location):
         print(
             f"Workspace location {workspace_location} not found. Creating workspace with empty git repository..."
