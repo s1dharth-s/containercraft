@@ -1,10 +1,8 @@
 # Containercraft
+
 **Containercraft** simplifies the process of setting up consistent, isolated, and reproducible Python development environments using Docker containers. By automating the environment setup, Containercraft eliminates the common "it works on my machine" problem, ensuring that every team member, from interns to seasoned developers, works in an identical setup. This streamlined approach not only saves time but also enhances productivity, allowing developers to focus on coding rather than configuration.
-<<<<<<< Updated upstream
-=======
 
 Containercraft offers a hassle-free solution for managing Python development environments with advanced features like Docker-in-Docker capability, embodying a perfect blend of consistency, efficiency, and best practices. It's designed to make the setup process as seamless as possible, ensuring that developers can start their projects with the right tools and configurations from day one.
->>>>>>> Stashed changes
 
 ![Screenshot from 2024-02-16 00-02-55](https://github.com/s1dharth-s/containercraft/assets/16634798/98bf435b-13ae-48dc-8d8f-3f1b454e19f0)
 
@@ -51,7 +49,7 @@ As a quick demo of `containercraft`, let us setup a sample workspace.
 
     ![image](https://github.com/s1dharth-s/containercraft/assets/16634798/7a5f552d-705b-4bd0-b882-7c93bdc92293)
 
-4. To manually launch as a dev container, or if you missed the prompt, press `F1` and then select **Dev Containers: Reopen in Container command**
+4. To manually launch as a dev container, or if you missed the prompt, press `F1` and then select **Dev Containers: Reopen in Container command**. Building an image for the first time will take longer than launching a workspace with an already build image.
 
    ![image](https://github.com/s1dharth-s/containercraft/assets/16634798/550c5405-c2af-4dcd-92d1-a7a3d3c1e9cb)
 
