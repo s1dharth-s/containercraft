@@ -34,7 +34,10 @@ The containers are to be used in tandem with VS Code's [Dev Containers](https://
 Run `containercraft --help` to see the available commands.
 
 ### `containercraft create`: To create a new dev container.
-As a quick demo of `containercraft`, let us setup a sample workspace.
+As a quick demo of `containercraft`, let us setup a sample workspace.  
+  
+![image](https://github.com/s1dharth-s/containercraft/assets/16634798/b1a6e469-28d4-4812-8ba0-27a0ee4b7346)  
+  
 1. In the same directory, run:
     ```bash
     # Create a
@@ -42,9 +45,14 @@ As a quick demo of `containercraft`, let us setup a sample workspace.
     ```
     You can choose to name your container to your liking and also enter the ports to be forwarded (none required for our sample). Docker capability is also optional for this sample.
 2. Open the created workspace folder in VS Code and when prompted, click the button to install the [Dev Container extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers). If you have the extension already installed, you will be prompted to open the workspace as a dev container.
-3. To manually launch as a dev container, or if you missed the prompt, press `F1` and then select **Dev Containers: Reopen in Container command**
-    ![alt text](images/image.png)
-4. There open up `sample.py` to get a glimpse of ruff linter and mypy in action. If you decide to push the repository to GitHub, you can see the CI pipeline working as well!
+
+    ![image](https://github.com/s1dharth-s/containercraft/assets/16634798/7a5f552d-705b-4bd0-b882-7c93bdc92293)  
+  
+4. To manually launch as a dev container, or if you missed the prompt, press `F1` and then select **Dev Containers: Reopen in Container command**  
+  
+   ![image](https://github.com/s1dharth-s/containercraft/assets/16634798/550c5405-c2af-4dcd-92d1-a7a3d3c1e9cb)  
+  
+6. There open up `sample.py` to get a glimpse of ruff linter and mypy in action. If you decide to push the repository to GitHub, you can see the CI pipeline working as well!
 
 ### `containercraft start`: To start a Dev Container outside of the VS Code environment.
 **This command will only work if you have build your container at least once with VS Code!**
