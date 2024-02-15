@@ -1,6 +1,8 @@
 # Containercraft
-**Containercraft** simplifies the process of setting up consistent, isolated, and reproducible Python development environments using Docker containers. By automating the environment setup, Containercraft eliminates the common "it works on my machine" problem, ensuring that every team member, from interns to seasoned developers, works in an identical setup. This streamlined approach not only saves time but also enhances productivity, allowing developers to focus on coding rather than configuration.
+**Containercraft** simplifies the process of setting up consistent, isolated, and reproducible Python development environments using Docker containers. By automating the environment setup, Containercraft eliminates the common "it works on my machine" problem, ensuring that every team member, from interns to seasoned developers, works in an identical setup. This streamlined approach not only saves time but also enhances productivity, allowing developers to focus on coding rather than configuration.  
 
+![Screenshot from 2024-02-16 00-02-55](https://github.com/s1dharth-s/containercraft/assets/16634798/98bf435b-13ae-48dc-8d8f-3f1b454e19f0)  
+  
 Key Features:
 
 - Automated Docker Environment Creation: Quickly sets up Docker containers tailored for Python development.
