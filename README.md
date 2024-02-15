@@ -52,8 +52,11 @@ As a quick demo of `containercraft`, let us setup a sample workspace.
   
    ![image](https://github.com/s1dharth-s/containercraft/assets/16634798/550c5405-c2af-4dcd-92d1-a7a3d3c1e9cb)  
   
-6. There open up `sample.py` to get a glimpse of ruff linter and mypy in action. If you decide to push the repository to GitHub, you can see the CI pipeline working as well!
+6. There open up `sample.py` to get a glimpse of ruff linter and mypy in action. If you decide to push the repository to GitHub, you can see the CI pipeline working as well!  
 
+  ![image](https://github.com/s1dharth-s/containercraft/assets/16634798/0c76d113-9bf4-4266-9e50-78b65792e75c)  
+
+  
 ### `containercraft start`: To start a Dev Container outside of the VS Code environment.
 **This command will only work if you have build your container at least once with VS Code!**
 
