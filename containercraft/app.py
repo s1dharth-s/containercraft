@@ -101,8 +101,7 @@ def create(
         config = json.load(f)
 
     docker_capability = typer.prompt("Enable Docker capability?", default="false")
-
-    if docker_capability == "true":
+    if docker_capability.lower() == "true" or docker_capability.lower() == "y":
         docker_type = typer.prompt(
             "Enter the type of Docker capability: \n 1. Docker-in-Docker \n2.Docker-outside-of-docker \n",
             default="1",
