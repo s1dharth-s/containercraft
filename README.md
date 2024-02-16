@@ -18,7 +18,7 @@ The containers are to be used in tandem with VS Code's [Dev Containers](https://
 
 ## Set Up
 1. Clone the [containercraft](https://github.com/s1dharth-s/containercraft) repository to your machine.**Note:** If you are cloning the current repository, make sure to use `git clone --recurse-submodules`.
-2. Run `./setup.sh` inside the repo to setup the dependencies. If you are curious, the script is just setting up [pipx](https://github.com/pypa/pipx), [Poetry](https://github.com/python-poetry/poetry) and Docker and VS Code. After the script finishes executing, **make sure to open up a new terminal to continue**. If docker does not work without `sudo`, try running the following:
+2. Run `./setup.sh` inside the repo to setup the dependencies. If you are curious, the script is just setting up [pipx](https://github.com/pypa/pipx), [Poetry](https://github.com/python-poetry/poetry) and Docker and VS Code. After the script finishes executing, **make sure to open up a new terminal to continue**. Run the following in the new terminal so that docker can work with a non-root user (**Important. Containercraft will not work without this step!**):
     ```bash
     sudo groupadd docker
     sudo usermod -aG docker $USER
