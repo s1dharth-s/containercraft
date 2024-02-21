@@ -1,3 +1,15 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/9FxAlQXs)  
+
+**NOTE:** While similar tools exist (and admittedly there are many more elegant ways that serves the same purpose), this project was a result of a deep dive into python development environments and tools, particularly VS Code features that support python development and their survey and comparison. More details will be presented in the report (WIP).  
+
+## Table of Contents
+- [Containercraft](#containercraft)
+  - [Set Up](#set-up)
+  - [Usage](#usage)
+    - [`containercraft create`: To create a new dev container.](#containercraft-create-to-create-a-new-dev-container)
+    - [`containercraft start`: To start a Dev Container outside of the VS Code environment.](#containercraft-start-to-start-a-dev-container-outside-of-the-vs-code-environment)
+  - [Topic-Wise Breakdown](#topic-wise-breakdown)
+
 # Containercraft
 
 **Containercraft** simplifies the process of setting up consistent, isolated, and reproducible Python development environments using Docker containers. By automating the environment setup, Containercraft eliminates the common "it works on my machine" problem, ensuring that every team member, from interns to seasoned developers, works in an identical setup. This streamlined approach not only saves time but also enhances productivity, allowing developers to focus on coding rather than configuration.
@@ -68,3 +80,16 @@ For example, run:
 # Starts and attatches to the container that was built as part of the last example
 containercraft start -w ./sample_workspace
 ```
+
+## Topic-Wise Breakdown
+| Topic       | Description |
+|-------------|-------------|
+| Linux       | The project is aimed at creating reproducible Linux-based dev environments. All development was done on Linux. |
+| Terminal    | Containercraft is a CLI application which was developed with Typer. |
+| Text Editor | Main focus of the project is the setup of VS Code for Python development. Many extensions and advanced features of VS Code were leveraged for this purpose. Advanced configuration of Dev Containers in VS Code was explored. |
+| Git         | Each new workspace will be initialized with a git repo (if it was not already a git repo). Git hooks and CI using GitHub Actions are implemented. |
+| Docker      | The dev environments are entirely based on Docker containers. Containercraft sets up Dockerfile from a template according to the user requirement and also has the capability to start and interact with previously created containers outside of VS Code. |
+| Automation  | This is the second major focus of the topic. Python and its features were extensively used to set up the dev containers. A survey of different tools available for supporting Python development such as linters, type checkers, testing, CI/CD etc., were studied. |
+| Gnuplot     | Not used. |
+| LaTeX       | The report will be written in LaTeX. |
+| LLM         | Not used. |
