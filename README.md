@@ -1,6 +1,6 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/9FxAlQXs)  
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/9FxAlQXs)
 
-**NOTE:** While similar tools exist (and admittedly there are many more elegant ways that serves the same purpose), this project was a result of a deep dive into python development environments and tools, particularly VS Code features that support python development and their survey and comparison. More details will be presented in the report (WIP).  
+**NOTE:** While similar tools exist (and admittedly there are many more elegant ways that serves the same purpose), this project was a result of a deep dive into python development environments and tools, particularly VS Code features that support python development and their survey and comparison. More details will be presented in the report (WIP).
 
 ## Table of Contents
 - [Containercraft](#containercraft)
