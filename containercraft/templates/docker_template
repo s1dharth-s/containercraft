@@ -9,8 +9,7 @@ RUN apt-get update && \
     apt-get install --no-install-recommends -y python{{PY_VER}} python{{PY_VER}}-dev python{{PY_VER}}-venv python3-pip python3-wheel build-essential && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
     python{{PY_VER}} -m pip install setuptools
-    
+
 COPY requirements.txt requirements.txt
 COPY .pre-commit-config.yaml .pre-commit-config.yaml
 RUN python{{PY_VER}} -m pip install --upgrade pip
-
